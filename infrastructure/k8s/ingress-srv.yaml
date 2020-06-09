@@ -10,7 +10,7 @@ spec:
     - host: pass.dev
       http:
         paths:
-          - path: /api/users/?(.*)
+          - path: /api/v1/users/?(.*)
             backend:
               serviceName: auth-srv
               servicePort: 3000
