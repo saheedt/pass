@@ -1,5 +1,8 @@
 import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
+import jwt from 'jsonwebtoken';
+import { Jwt } from '../services/jwt';
+
 import { User } from '../db/models/user';
 import { RequestValidationError } from '../errors/request-validation-error';
 import { BadRequestError } from '../errors/bad-request-error';
@@ -34,6 +37,12 @@ async (req: Request, res: Response) => {
   const user = User.build({ email, password });
   await user.save();
 
+  const token = Jwt.generateToken({
+    id: user.id,
+    email: user.email
+  });
+  // @ts-ignore
+  req.session = { jwt: token };
   res.status(201).send(user);
 });
 
