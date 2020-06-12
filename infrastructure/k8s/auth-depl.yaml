@@ -15,6 +15,12 @@ spec:
       containers:
         - name: auth
           image: saheedt/auth
+          env:
+            - name: JWT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: jwt-secret
+                  key: JWT_SECRET
           # GCP config for image naming format:
           # [constant name i.e:us.gcr.io]/[project id]/[image name]
           # image: us.gcr.io/pass-dev-279717/auth
