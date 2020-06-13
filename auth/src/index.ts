@@ -10,7 +10,7 @@ import { signOutRouter } from './routes/signout';
 import { signUpRouter } from './routes/signup';
 
 import { errorHandler } from './middlewares/error-handler';
-import { NotFoundError } from './errors/not-found-error';
+import { RouteNotFoundError } from './errors/route-not-found-error';
 
 const app = express();
 // tells express to trust proxy as
@@ -30,7 +30,7 @@ app.use(signOutRouter);
 app.use(signUpRouter);
 
 app.all('*', (req: Request, res: Response) => {
-  throw new NotFoundError();
+  throw new RouteNotFoundError();
 });
 
 app.use(errorHandler);

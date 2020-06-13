@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { BadRequestError } from '../errors/bad-request-error';
 
-export class Jwt {
+export class JwtManager {
   static generateToken(payload: string | object | Buffer, expiry='12 weeks'): string {
     try {
       return jwt.sign(payload, process.env.JWT_SECRET!);
