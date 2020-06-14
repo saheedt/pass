@@ -1,39 +1,6 @@
-import express, { Request, Response } from 'express';
-import 'express-async-errors';
-import { json } from 'body-parser';
 import mongoose from 'mongoose';
-import cookieSession from 'cookie-session';
 
-import { currentUserRouter } from './routes/current-user';
-import { signInRouter } from './routes/signin';
-import { signOutRouter } from './routes/signout';
-import { signUpRouter } from './routes/signup';
-
-import { errorHandler } from './middlewares/error-handler';
-import { RouteNotFoundError } from './errors/route-not-found-error';
-
-const app = express();
-// tells express to trust proxy as
-// service is behind ngix ingress proxy
-app.set('trust proxy', true);
-app.use(json());
-app.use(
-  cookieSession({
-    signed: false,
-    secure: true
-  })
-);
-
-app.use(currentUserRouter);
-app.use(signInRouter);
-app.use(signOutRouter);
-app.use(signUpRouter);
-
-app.all('*', (req: Request, res: Response) => {
-  throw new RouteNotFoundError();
-});
-
-app.use(errorHandler);
+import { app } from './app';
 
 const start = async () => {
   if (!process.env.JWT_SECRET) {
