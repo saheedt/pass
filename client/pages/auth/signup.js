@@ -13,13 +13,10 @@ export default () => {
     onSuccess: () => Router.push('/')
   });
 
-
-  const onSubmitHandler = async (event) => { 
+  const onSubmitHandler = async (event) => {
     event.preventDefault();
     doRequest();
   };
-
-  
 
   return (
     <form onSubmit={onSubmitHandler}>
@@ -45,4 +42,4 @@ export default () => {
       <button className="btn btn-primary">Sign Up</button>
     </form>
   );
-}
+};
