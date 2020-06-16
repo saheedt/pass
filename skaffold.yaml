@@ -21,3 +21,11 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
+    - image: saheedt/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: .
