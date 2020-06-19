@@ -1,0 +1,31 @@
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infrastructure/k8s/*
+build:
+  local:
+    push: false
+  # GCP config to connect to remote cluster with cluster id 
+  # googleCloudBuild:
+  #   projectId: pass-dev-279717
+  artifacts:
+    - image: saheedt/auth
+    # GCP config for docker images
+    # - image: us.gcr.io/pass-dev-279717/auth
+      context: auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'src/**/*.ts'
+            dest: .
+    - image: saheedt/client
+      context: client
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: '**/*.js'
+            dest: .
