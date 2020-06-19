@@ -18,7 +18,6 @@ AppComponent.getInitialProps = async (appContext) => {
   if (appContext.Component.getInitialProps) {
     pageProps = await appContext.Component.getInitialProps(appContext.ctx);
   }
-  console.log(pageProps);
   return { pageProps, ...data };
 };
 
