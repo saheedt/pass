@@ -1,10 +1,8 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
-import { JwtManager } from '../services/jwt-manager';
+import { JwtManager, validateRequest, BadRequestError } from '@saheedpass/common';
 
-import { validateRequest } from '../middlewares/validate-request';
 import { User } from '../db/models/user';
-import { BadRequestError } from '../errors/bad-request-error';
 
 const router = express.Router();
 
