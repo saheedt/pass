@@ -1,12 +1,14 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
+import {
+  validateRequest,
+  BadRequestError,
+  NotFoundError,
+  JwtManager
+} from '@saheedpass/common';
 
 import { PasswordManager } from '../services/password-manager';
-import { JwtManager } from '../services/jwt-manager';
-import { BadRequestError } from '../errors/bad-request-error';
-import { NotFoundError } from '../errors/not-found-error';
 import { User } from '../db/models/user';
-import { validateRequest } from '../middlewares/validate-request';
 
 const router = express.Router();
 
