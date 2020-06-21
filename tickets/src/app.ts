@@ -2,8 +2,9 @@ import express, { Request, Response } from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
+import { createTicketRouter } from './routes/new';
 
-import { errorHandler, RouteNotFoundError } from '@saheedpass/common';
+import { errorHandler, RouteNotFoundError, currentUser } from '@saheedpass/common';
 
 const app = express();
 // tells express to trust proxy as
@@ -16,7 +17,9 @@ app.use(
     secure: process.env.NODE_ENV !== 'test'
   })
 );
+app.use(currentUser);
 
+app.use(createTicketRouter);
 app.all('*', (req: Request, res: Response) => {
   throw new RouteNotFoundError();
 });
