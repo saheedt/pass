@@ -4,6 +4,7 @@ import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 import { createTicketRouter } from './routes/new';
 import { showTicketRouter } from './routes/show';
+import { indexTicketRouter } from './routes/index';
 
 import { errorHandler, RouteNotFoundError, currentUser } from '@saheedpass/common';
 
@@ -22,6 +23,7 @@ app.use(currentUser);
 
 app.use(createTicketRouter);
 app.use(showTicketRouter);
+app.use(indexTicketRouter);
 
 app.all('*', (req: Request, res: Response) => {
   throw new RouteNotFoundError();
