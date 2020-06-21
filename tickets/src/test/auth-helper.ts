@@ -1,15 +1,20 @@
 import request from 'supertest';
+import { JwtManager } from '@saheedpass/common';
 import { app } from '../app';
 
-export const getCookie = async () => {
-  const email = 'test@test.com';
-  const password = 'password';
+export const getCookie = () => {
+  // create payload
+  const payload = {
+    id: 'habkjabkja',
+    email: 'test@test.com',
+    password: 'password'
+  };
 
-  const response = await request(app)
-    .post('/api/v1/users/signup')
-    .send({ email, password })
-    .expect(201);
-  
-  const cookie = response.get('Set-Cookie');
-  return cookie;
+  // create JWT!
+  const token = JwtManager.generateToken(payload);
+
+  //  Encode JSON session object to base64
+  const base64 = Buffer.from(JSON.stringify({ jwt: token })).toString('base64');
+
+  return [`express:sess=${base64}`];
 };
