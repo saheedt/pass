@@ -1,11 +1,11 @@
 import request from 'supertest';
+import mongoose from 'mongoose';
 import { JwtManager } from '@saheedpass/common';
-import { app } from '../app';
 
 export const getCookie = () => {
   // create payload
   const payload = {
-    id: 'habkjabkja',
+    id: new mongoose.Types.ObjectId().toHexString(),
     email: 'test@test.com',
     password: 'password'
   };
