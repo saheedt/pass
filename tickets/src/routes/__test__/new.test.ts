@@ -1,8 +1,8 @@
 import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../db/models/ticket';
-
 import { getCookie } from '../../test/auth-helper';
+import { natsClientWrapper } from '../../nats-client-wrapper';
 
 it('has a route handler listening to /api/v1/tickets for post request', async () => {
   const response = await request(app)
@@ -84,4 +84,18 @@ it('creates a ticket with valid inputs', async () => {
   tickets = await Ticket.find({});
   expect(tickets.length).toEqual(1);
   expect(tickets[0].price).toEqual(20);
+});
+
+it('publishes an event', async () => {
+  const title = 'ndadkn';
+  await request(app)
+    .post('/api/v1/tickets')
+    .set('Cookie', getCookie())
+    .send({
+      title,
+      price: 20
+    })
+    .expect(201);
+  
+  expect(natsClientWrapper.client.publish).toHaveBeenCalled();
 });

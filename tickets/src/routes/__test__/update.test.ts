@@ -1,8 +1,8 @@
 import request from 'supertest'
 import mongoose from 'mongoose';
-
 import { app } from '../../app';
 import { getCookie } from '../../test/auth-helper';
+import { natsClientWrapper } from '../../nats-client-wrapper';
 
 it('returns a 404 if provided id doesnt exist', async () => {
   const id = new mongoose.Types.ObjectId().toHexString();
@@ -83,4 +83,20 @@ it('updates the ticket if supplied inputs are valid', async () => {
   expect(updatedResp.body.title).toEqual('win');
   expect(updatedResp.body.price).toEqual(100);
 
+});
+
+it('publishes an event', async () => {
+  const cookie = getCookie();
+  const response = await request(app)
+    .post('/api/v1/tickets')
+    .set('Cookie', cookie)
+    .send({ title: 'addsdd', price: 44 });
+
+  await request(app)
+    .put(`/api/v1/tickets/${response.body.id}`)
+    .set('Cookie', cookie)
+    .send({ title: 'win', price: 100 })
+    .expect(200);
+  
+  expect(natsClientWrapper.client.publish).toHaveBeenCalled();
 });
