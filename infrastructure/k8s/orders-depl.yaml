@@ -22,6 +22,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: EXPIRATION_WINDOW_SECONDS
+              value: '900'
             - name: NATS_URL
               value: 'http://nats-srv:4222'
             - name: MONGO_URI
