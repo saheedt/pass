@@ -2,9 +2,10 @@ import mongoose from 'mongoose';
 import request from 'supertest';
 import { app } from '../../app';
 import { Ticket } from '../../db/models/ticket';
+import { Order, OrderStatus } from '../../db/models/order';
 import { getCookie } from '../../test/auth-helper';
 
-it('fetches an order', async () => {
+it('marks an order cancelled', async () => {
   const ticket = Ticket.build({ title: 'test', price: 20 });
   await ticket.save();
 
@@ -16,16 +17,17 @@ it('fetches an order', async () => {
     .send({ ticketId: ticket.id })
     .expect(201);
   
-  const {body: fetchedOrder } = await request(app)
-    .get(`/api/v1/orders/${order.id}`)
+  await request(app)
+    .delete(`/api/v1/orders/${order.id}`)
     .set('Cookie', cookie)
     .send()
-    .expect(200);
+    .expect(204);
   
-  expect(fetchedOrder.id).toEqual(order.id);
+  const updatedOrder = await Order.findById(order.id);
+  expect(updatedOrder!.status).toEqual(OrderStatus.Cancelled);
 });
 
-it('returns error if order belongs to another user', async () => {
+it('returns unauthorized error if trying to cancel order belonging to another user', async () => {
   const ticket = Ticket.build({ title: 'test', price: 20 });
   await ticket.save();
 
@@ -38,19 +40,19 @@ it('returns error if order belongs to another user', async () => {
     .expect(201);
 
   await request(app)
-    .get(`/api/v1/orders/${order.id}`)
+    .delete(`/api/v1/orders/${order.id}`)
     .set('Cookie', getCookie())
     .send()
     .expect(401);
 });
 
-it('returns error if order is not found', async () => {
+it('returns not found error if trying to cancel non-existing order', async () => {
   const ticket = Ticket.build({ title: 'test', price: 20 });
   await ticket.save();
 
   const cookie = getCookie();
 
-  await request(app)
+  const { body: order } = await request(app)
     .post('/api/v1/orders')
     .set('Cookie', cookie)
     .send({ ticketId: ticket.id })
@@ -58,8 +60,10 @@ it('returns error if order is not found', async () => {
   
   const nonExistingOrderId = mongoose.Types.ObjectId().toHexString();
   await request(app)
-    .get(`/api/v1/orders/${nonExistingOrderId}`)
+    .delete(`/api/v1/orders/${nonExistingOrderId}`)
     .set('Cookie', cookie)
     .send()
     .expect(404);
 });
+
+it.todo('emits an order cancelled event');
