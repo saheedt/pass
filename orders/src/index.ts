@@ -19,7 +19,9 @@ const start = async () => {
   if (!process.env.NATS_URL) {
     throw new Error('NATS_URL must be defined.');
   }
-  
+  if (!process.env.EXPIRATION_WINDOW_SECONDS) {
+    throw new Error('EXPIRATION_WINDOW_SECONDS must be defined.');
+  }
   try {
     await natsClientWrapper.connect(
       process.env.NATS_CLUSTER_ID,
@@ -42,7 +44,6 @@ const start = async () => {
   } catch (err) {
     console.error(err);
   }
-  
 };
 app.listen(3000, () => {
   console.log('Listening on Port 3000!!!'); 
