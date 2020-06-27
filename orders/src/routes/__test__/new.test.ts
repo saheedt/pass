@@ -4,6 +4,7 @@ import { app } from '../../app';
 import { Ticket } from '../../db/models/ticket';
 import { Order, OrderStatus } from '../../db/models/order';
 import { getCookie } from '../../test/auth-helper';
+import { natsClientWrapper } from '../../nats-client-wrapper';
 
 
 it('returns an error if ticket does not exist', async () => {
@@ -53,4 +54,18 @@ it('reserves a ticket', async () => {
   expect(orderResp.body.status).toEqual('created');
 });
 
-it.todo('emits an order created event');
+it('emits an order:created event', async () => {
+  const ticket = Ticket.build({
+    title: 'test ticket',
+    price: 20
+  });
+  await ticket.save();
+
+  await request(app)
+    .post('/api/v1/orders')
+    .set('Cookie', getCookie())
+    .send({ ticketId: ticket.id })
+    .expect(201);
+  
+  expect(natsClientWrapper.client.publish).toHaveBeenCalled();
+});
