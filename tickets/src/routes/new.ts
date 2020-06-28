@@ -33,6 +33,7 @@ router.post('/api/v1/tickets',
       title: ticket.title,
       price: ticket.price,
       userId: ticket.userId,
+      version: ticket.version,
     });
     
     res.status(201).send(ticket);
