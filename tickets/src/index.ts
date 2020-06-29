@@ -2,6 +2,8 @@ import mongoose from 'mongoose';
 
 import { app } from './app';
 import { natsClientWrapper } from './nats-client-wrapper';
+import { OrderCreatedListener } from './events/listeners/order-created-listener';
+import { OrderCancelledListener } from './events/listeners/order-cancelled-listener';
 
 const start = async () => {
   if (!process.env.JWT_SECRET) {
@@ -32,6 +34,9 @@ const start = async () => {
     });
     process.on('SIGINT', () => natsClientWrapper.client.close());
     process.on('SIGINT', () => natsClientWrapper.client.close());
+
+    new OrderCreatedListener(natsClientWrapper.client).listen();
+    new OrderCancelledListener(natsClientWrapper.client).listen();
 
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
