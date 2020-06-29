@@ -5,7 +5,11 @@ import { Ticket } from '../../db/models/ticket';
 import { getCookie } from '../../test/auth-helper';
 
 it('fetches an order', async () => {
-  const ticket = Ticket.build({ title: 'test', price: 20 });
+  const ticket = Ticket.build({
+    id: mongoose.Types.ObjectId().toHexString(),
+    title: 'test',
+    price: 20
+  });
   await ticket.save();
 
   const cookie = getCookie();
@@ -26,7 +30,11 @@ it('fetches an order', async () => {
 });
 
 it('returns error if order belongs to another user', async () => {
-  const ticket = Ticket.build({ title: 'test', price: 20 });
+  const ticket = Ticket.build({
+    id: mongoose.Types.ObjectId().toHexString(),
+    title: 'test',
+    price: 20
+  });
   await ticket.save();
 
   const cookie = getCookie();
@@ -45,7 +53,11 @@ it('returns error if order belongs to another user', async () => {
 });
 
 it('returns error if order is not found', async () => {
-  const ticket = Ticket.build({ title: 'test', price: 20 });
+  const ticket = Ticket.build({
+    id: mongoose.Types.ObjectId().toHexString(),
+    title: 'test',
+    price: 20
+  });
   await ticket.save();
 
   const cookie = getCookie();

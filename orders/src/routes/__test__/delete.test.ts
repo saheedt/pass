@@ -7,7 +7,11 @@ import { getCookie } from '../../test/auth-helper';
 import { natsClientWrapper } from '../../nats-client-wrapper';
 
 it('marks an order cancelled', async () => {
-  const ticket = Ticket.build({ title: 'test', price: 20 });
+  const ticket = Ticket.build({
+    id: mongoose.Types.ObjectId().toHexString(),
+    title: 'test',
+    price: 20
+  });
   await ticket.save();
 
   const cookie = getCookie();
@@ -29,7 +33,11 @@ it('marks an order cancelled', async () => {
 });
 
 it('returns unauthorized error if trying to cancel order belonging to another user', async () => {
-  const ticket = Ticket.build({ title: 'test', price: 20 });
+  const ticket = Ticket.build({
+    id: mongoose.Types.ObjectId().toHexString(),
+    title: 'test',
+    price: 20
+  });
   await ticket.save();
 
   const cookie = getCookie();
@@ -48,7 +56,11 @@ it('returns unauthorized error if trying to cancel order belonging to another us
 });
 
 it('returns not found error if trying to cancel non-existing order', async () => {
-  const ticket = Ticket.build({ title: 'test', price: 20 });
+  const ticket = Ticket.build({
+    id: mongoose.Types.ObjectId().toHexString(),
+    title: 'test',
+    price: 20
+  });
   await ticket.save();
 
   const cookie = getCookie();
@@ -68,7 +80,11 @@ it('returns not found error if trying to cancel non-existing order', async () =>
 });
 
 it('emits an order cancelled event', async () => {
-  const ticket = Ticket.build({ title: 'test', price: 20 });
+  const ticket = Ticket.build({
+    id: mongoose.Types.ObjectId().toHexString(),
+    title: 'test',
+    price: 20
+  });
   await ticket.save();
 
   const cookie = getCookie();

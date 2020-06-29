@@ -1,12 +1,12 @@
 import mongoose from 'mongoose';
 import request from 'supertest';
 import { app } from '../../app';
-import { Order, OrderStatus } from '../../db/models/order';
 import { Ticket } from '../../db/models/ticket';
 import { getCookie } from '../../test/auth-helper';
 
 const buildTicket = async (title: string, price: number) => {
   const ticket = Ticket.build({
+    id: mongoose.Types.ObjectId().toHexString(),
     title,
     price
   });
