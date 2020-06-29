@@ -1,11 +1,6 @@
 import express, { Request, Response } from 'express';
 import { body } from 'express-validator';
-import {
-  validateRequest,
-  NotFoundError,
-  requireAuth,
-  NotAuthorizedError
-} from '@saheedpass/common';
+import { validateRequest, NotFoundError, requireAuth, NotAuthorizedError, BadRequestError } from '@saheedpass/common';
 import { Ticket } from '../db/models/ticket';
 import { TicketUpdatedPublisher } from '../events/publishers/ticket-update-publisher';
 import { natsClientWrapper } from '../nats-client-wrapper';
@@ -29,6 +24,10 @@ router.put('/api/v1/tickets/:id',
 
     if (!ticket) {
       throw new NotFoundError('Ticket not found');
+    }
+
+    if (ticket.orderId) {
+      throw new BadRequestError('Cannot edit a reserved ticket');
     }
 
     if (ticket.userId !== req.currentUser!.id) {
