@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 import { JwtManager } from '@saheedpass/common';
 
-export const getCookie = () => {
+export const getCookie = (id?: string) => {
   // create payload
   const payload = {
-    id: new mongoose.Types.ObjectId().toHexString(),
+    id: id || new mongoose.Types.ObjectId().toHexString(),
     email: 'test@test.com',
     password: 'password'
   };
