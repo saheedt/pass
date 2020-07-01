@@ -4,6 +4,7 @@ import { json } from 'body-parser';
 import cookieSession from 'cookie-session';
 
 import { errorHandler, RouteNotFoundError, currentUser } from '@saheedpass/common';
+import { createChargeRouter } from './routes/new';
 
 const app = express();
 // tells express to trust proxy as
@@ -17,6 +18,7 @@ app.use(
   })
 );
 app.use(currentUser);
+app.use(createChargeRouter);
 
 app.all('*', (req: Request, res: Response) => {
   throw new RouteNotFoundError();
