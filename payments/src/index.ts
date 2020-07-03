@@ -2,10 +2,8 @@ import mongoose from 'mongoose';
 
 import { app } from './app';
 import { natsClientWrapper } from './nats-client-wrapper';
-import { TicketCreatedListener } from './events/listeners/ticket-created-listener';
-import { TicketUpdatedListener } from './events/listeners/ticket-updated-listener';
-import { ExpirationCompleteListener } from './events/listeners/expiration-complete-listener';
-import { PaymentCreatedListener } from './events/listeners/payment-created-listener';
+import { OrderCancelledListener } from './events/listener/order-cancelled-listener';
+import { OrderCreatedListener } from './events/listener/order-created-listener';
 
 const start = async () => {
   if (!process.env.JWT_SECRET) {
@@ -23,9 +21,7 @@ const start = async () => {
   if (!process.env.NATS_URL) {
     throw new Error('NATS_URL must be defined.');
   }
-  if (!process.env.EXPIRATION_WINDOW_SECONDS) {
-    throw new Error('EXPIRATION_WINDOW_SECONDS must be defined.');
-  }
+  
   try {
     await natsClientWrapper.connect(
       process.env.NATS_CLUSTER_ID,
@@ -39,10 +35,8 @@ const start = async () => {
     process.on('SIGINT', () => natsClientWrapper.client.close());
     process.on('SIGINT', () => natsClientWrapper.client.close());
 
-    new TicketCreatedListener(natsClientWrapper.client).listen();
-    new TicketUpdatedListener(natsClientWrapper.client).listen();
-    new ExpirationCompleteListener(natsClientWrapper.client).listen();
-    new PaymentCreatedListener(natsClientWrapper.client).listen();
+    new OrderCreatedListener(natsClientWrapper.client).listen();
+    new OrderCancelledListener(natsClientWrapper.client).listen();
 
     await mongoose.connect(process.env.MONGO_URI, {
       useNewUrlParser: true,
@@ -53,6 +47,7 @@ const start = async () => {
   } catch (err) {
     console.error(err);
   }
+  
 };
 app.listen(3000, () => {
   console.log('Listening on Port 3000!!!'); 
