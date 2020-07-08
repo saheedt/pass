@@ -6,8 +6,9 @@ class Stripe {
       id: fakeChargeId
     })
   };
-};
-const stripe = jest.fn(() => new Stripe());
+}
+
+const stripe = new Stripe();
 
 export default Stripe;
 export { stripe, fakeChargeId };
