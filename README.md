@@ -20,7 +20,7 @@ The application is splitted into 6 micro services:
 5. Docker images of each service from docker hub are then used to spin up pods withing a k8s cluster
 6. Each service is exposed for communication withing the cluster with a cluster-ip service
 7. Ingress Nginx is used for routing traffic to appropriate services and load-balancing.
-8. Re-usable code for Authorization, Events publishing / subscribing e.t.c are shared between services via a npm module ( [pass-common](https://github.com/saheedt/pass-common) )
+8. Re-usable code for Authorization, Events publishing / subscribing e.t.c are shared between services via a npm module [pass-common](https://github.com/saheedt/pass-common)
 9. Github actions is used to run tests and ideally can also be used to handle automatic deployments.
 
 ## Tools used
