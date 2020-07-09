@@ -1,9 +1,9 @@
 # pass
-A ticketing sale / purchase application built in a micro services architecture
+A ticketing sale / purchase application built with a micro services architecture
 
 ## Overview
 Pass is a demo application for listing and purchase of tickets.
-It is an event based application built in a microservices architecture to be run in a Kubernetes cluster.
+It is an event based application built with a microservices architecture to be run in a Kubernetes cluster.
 The application is splitted into 6 micro services:
 - Auth: handles authentication
 - Tickets: handles ticket creation, update, listing and delete
